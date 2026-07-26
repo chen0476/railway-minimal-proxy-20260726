@@ -16,7 +16,7 @@ https://httpbingo.org
 
 ```powershell
 $env:ORIGIN='https://httpbingo.org'
-$env:PORT='3000'
+$env:APP_PORT='3000'
 npm.cmd run check
 npm.cmd start
 ```
@@ -39,6 +39,11 @@ ORIGIN=https://httpbingo.org
 ```
 
 6. 部署完成后，在 Networking / Public Networking 中点击 Generate Domain。
+7. Generate Domain 的 target port 填：
+
+```text
+3000
+```
 
 验证命令：
 
