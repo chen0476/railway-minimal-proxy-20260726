@@ -22,12 +22,18 @@ https://httpbingo.org
 待部署后填写，常见为 Railway 生成的 railway.app / up.railway.app 域名
 ```
 
+GitHub 测试仓库：
+
+```text
+https://github.com/chen0476/railway-minimal-proxy-20260726
+```
+
 ## 测试项
 
 | 项目 | 结果 | 证据或备注 |
 | --- | --- | --- |
 | 默认访问域名格式 | 待线上确认 | Railway 需要手动 Generate Domain |
-| 是否能部署反向代理 | 待测 | Node.js 原生 fetch 最小代理 |
+| 是否能部署反向代理 | 本地通过，线上待测 | Node.js 原生 fetch 最小代理；本地 GET/query/POST 已验证 |
 | 是否支持 HTTPS | 待测 | 生成公开域名后验证 |
 | 是否会休眠 | 待确认 | 看当前套餐和实测 |
 | 国内是否能访问 | 待测 | 用国内浏览器和移动网络实测 |
@@ -37,4 +43,4 @@ https://httpbingo.org
 
 ## 当前结论
 
-测试包待本地验证和线上部署。
+本地验证通过，GitHub 测试仓库已创建。下一步在 Railway 中从 GitHub 导入仓库部署，并在 Networking / Public Networking 中 Generate Domain。
