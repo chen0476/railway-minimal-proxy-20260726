@@ -49,6 +49,7 @@ ORIGIN=https://httpbingo.org
 
 ```powershell
 curl.exe -I https://<railway-domain>/html
+curl.exe -i https://<railway-domain>/health
 curl.exe -s "https://<railway-domain>/anything/railway-test?a=1"
 curl.exe -s -X POST "https://<railway-domain>/anything/post-test?b=2" -H "content-type: application/x-www-form-urlencoded" --data-urlencode "ok=true"
 ```
@@ -56,6 +57,7 @@ curl.exe -s -X POST "https://<railway-domain>/anything/post-test?b=2" -H "conten
 通过标准：
 
 - Railway 默认域名 HTTPS 可访问。
+- `/health` 能立即返回 `ok`。
 - 地址栏保持 Railway 默认域名。
 - `/html` 返回测试源站页面内容。
 - path、query、POST body 能转发。

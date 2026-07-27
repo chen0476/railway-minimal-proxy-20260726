@@ -72,9 +72,23 @@ function copyResponseHeaders(upstream) {
 }
 
 async function handler(req) {
+  const incomingUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  if (incomingUrl.pathname === '/health') {
+    return new Response('ok', {
+      status: 200,
+      headers: {
+        'content-type': 'text/plain; charset=utf-8',
+        'cache-control': 'no-store',
+        'x-proxy-platform-test': 'railway'
+      }
+    });
+  }
+
   const targetUrl = buildTargetUrl(req);
   const method = req.method || 'GET';
   const hasBody = !['GET', 'HEAD'].includes(method);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
 
   try {
     const upstream = await fetch(targetUrl, {
@@ -82,7 +96,8 @@ async function handler(req) {
       headers: copyRequestHeaders(req),
       body: hasBody ? req : undefined,
       duplex: hasBody ? 'half' : undefined,
-      redirect: 'manual'
+      redirect: 'manual',
+      signal: controller.signal
     });
 
     return new Response(upstream.body, {
@@ -100,6 +115,8 @@ async function handler(req) {
         'cache-control': 'no-store'
       }
     });
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
