@@ -19,7 +19,7 @@ https://httpbingo.org
 平台默认访问域名：
 
 ```text
-https://railway-minimal-proxy-20260726-production.up.railway.app
+https://railway-minimal-proxy-20260726-production-c40c.up.railway.app
 ```
 
 GitHub 测试仓库：
@@ -32,9 +32,9 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 
 | 项目 | 结果 | 证据或备注 |
 | --- | --- | --- |
-| 默认访问域名格式 | 待线上确认 | Railway 需要手动 Generate Domain |
-| 是否能部署反向代理 | 本地通过，线上待测 | Node.js 原生 fetch 最小代理；本地 GET/query/POST 已验证 |
-| 是否支持 HTTPS | 已生成 HTTPS 域名，应用响应待复测 | 域名为 `https://railway-minimal-proxy-20260726-production.up.railway.app` |
+| 默认访问域名格式 | 已确认 | `https://<service>-<environment>-<suffix>.up.railway.app` |
+| 是否能部署反向代理 | 已确认 | `/health` 和 path/query 测试返回 200，响应头含 `x-proxy-platform-test: railway` |
+| 是否支持 HTTPS | 已确认 | `https://railway-minimal-proxy-20260726-production-c40c.up.railway.app` |
 | 是否会休眠 | 待确认 | 看当前套餐和实测 |
 | 国内是否能访问 | 待测 | 用国内浏览器和移动网络实测 |
 | 微信内是否能访问 | 待测 | 用微信内置浏览器实测 |
@@ -43,7 +43,13 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 
 ## 当前结论
 
-本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但线上测试仍返回 Railway 边缘层 `502 Application failed to respond`。`/health` 也没有返回应用响应，说明问题不是源站请求卡住，而是 Railway Public Networking 与容器监听端口没有对齐，或部署运行态仍在崩溃。
+本地验证通过，GitHub 测试仓库已创建。Railway 通过手动生成的新公开域名已验证成功：
+
+```text
+https://railway-minimal-proxy-20260726-production-c40c.up.railway.app
+```
+
+该域名 `/health` 返回 `200 ok`，响应头含 `x-proxy-platform-test: railway`；访问 `/anything/railway-test?x=1` 返回 `200 OK`；`curl -L` 最终地址仍保持 Railway 域名，说明是反向代理，不是跳转。
 
 2026-07-27 处理：
 
@@ -54,3 +60,9 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 - 本地双端口健康检查确认 `3000` 与 `8080` 均返回 `200 ok`；线上需等待 Railway 自动部署后复测。
 - 最新提交 `82ad5ea` 已推送到 GitHub 触发 Railway 自动部署。
 - 线上复测：通过本地代理访问仍未拿到应用 `/health` 响应；直连 DNS 可解析到 Railway IP，但 HTTPS 直连超时。普通 `railway login` 与 `railway login --browserless` 均未自动完成授权。
+
+2026-07-27 手动域名复测：
+
+- 旧域名 `https://railway-minimal-proxy-20260726-production.up.railway.app` 曾返回 502。
+- 用户手动生成新域名 `https://railway-minimal-proxy-20260726-production-c40c.up.railway.app`。
+- 新域名验证通过，`/health` 首字节约 1.15 秒，首页最终 URL 保持 Railway 域名。
