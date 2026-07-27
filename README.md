@@ -65,4 +65,6 @@ curl.exe -s -X POST "https://<railway-domain>/anything/post-test?b=2" -H "conten
 
 端口说明：
 
-- 本测试包固定监听 `3000`，用于匹配已生成 Railway 公开域名的 target port。
+- 本测试包同时监听 Railway 注入的 `PORT` 和 `APP_PORT`。
+- `APP_PORT` 默认 `3000`，用于匹配已生成 Railway 公开域名的 target port。
+- 如果 Railway 后台把 Public Networking target port 改成平台注入端口，代码也能兼容。

@@ -43,4 +43,12 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 
 ## 当前结论
 
-本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但线上测试仍无法打开。`/health` 也没有返回应用响应，说明问题不是源站请求卡住，而是 Public Networking target port 与容器监听端口不一致。为避免继续手动改 Railway 页面，已改为单端口固定监听 `3000`，匹配当前已生成公开域名的 target port。
+本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但线上测试仍返回 Railway 边缘层 `502 Application failed to respond`。`/health` 也没有返回应用响应，说明问题不是源站请求卡住，而是 Railway Public Networking 与容器监听端口没有对齐，或部署运行态仍在崩溃。
+
+2026-07-27 处理：
+
+- 用户收到 Railway 邮件提示部署曾崩溃，时间为 `2026-07-27 10:23:48`。
+- CLI 已安装，但 `railway whoami` 返回 Unauthorized；未获得账号授权前无法用 CLI 读日志或修改域名端口。
+- Railway 页面访问日志较慢，暂未稳定拿到运行日志。
+- 代码已改为同时监听 Railway 注入的 `PORT` 和默认 `APP_PORT=3000`，用于同时兼容平台默认端口和当前已生成公开域名的 target port。
+- 本地双端口健康检查确认 `3000` 与 `8080` 均返回 `200 ok`；线上需等待 Railway 自动部署后复测。

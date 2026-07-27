@@ -1,5 +1,9 @@
 const origin = new URL(process.env.ORIGIN || 'https://httpbingo.org');
-const port = Number(process.env.APP_PORT || 3000);
+const configuredPorts = [
+  Number(process.env.PORT),
+  Number(process.env.APP_PORT || 3000)
+].filter((value) => Number.isInteger(value) && value > 0);
+const ports = [...new Set(configuredPorts.length ? configuredPorts : [3000])];
 
 const hopByHopHeaders = new Set([
   'connection',
@@ -122,13 +126,38 @@ async function handler(req) {
 
 const http = await import('node:http');
 
-http.createServer(async (req, res) => {
-  const response = await handler(req);
-  res.writeHead(response.status, Object.fromEntries(response.headers.entries()));
-  if (response.body) {
-    for await (const chunk of response.body) res.write(chunk);
-  }
-  res.end();
-}).listen(port, '0.0.0.0', () => {
-  console.log(`Railway proxy test listening on ${port}, origin=${origin.origin}`);
-});
+function createProxyServer(port) {
+  const server = http.createServer(async (req, res) => {
+    try {
+      const response = await handler(req);
+      res.writeHead(response.status, Object.fromEntries(response.headers.entries()));
+      if (response.body) {
+        for await (const chunk of response.body) res.write(chunk);
+      }
+      res.end();
+    } catch (error) {
+      const incident = `RWP-${Date.now().toString(36)}`;
+      console.error(incident, error);
+      res.writeHead(500, {
+        'content-type': 'text/plain; charset=utf-8',
+        'cache-control': 'no-store'
+      });
+      res.end(`Proxy internal error. Incident: ${incident}`);
+    }
+  });
+
+  server.listen(port, '0.0.0.0', () => {
+    console.log(`Railway proxy test listening on ${port}, origin=${origin.origin}`);
+  });
+
+  server.on('error', (error) => {
+    console.error(`Railway proxy failed to listen on ${port}`, error);
+    process.exitCode = 1;
+  });
+
+  return server;
+}
+
+for (const port of ports) {
+  createProxyServer(port);
+}
