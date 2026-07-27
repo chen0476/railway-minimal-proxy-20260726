@@ -52,3 +52,5 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 - Railway 页面访问日志较慢，暂未稳定拿到运行日志。
 - 代码已改为同时监听 Railway 注入的 `PORT` 和默认 `APP_PORT=3000`，用于同时兼容平台默认端口和当前已生成公开域名的 target port。
 - 本地双端口健康检查确认 `3000` 与 `8080` 均返回 `200 ok`；线上需等待 Railway 自动部署后复测。
+- 最新提交 `82ad5ea` 已推送到 GitHub 触发 Railway 自动部署。
+- 线上复测：通过本地代理访问仍未拿到应用 `/health` 响应；直连 DNS 可解析到 Railway IP，但 HTTPS 直连超时。普通 `railway login` 与 `railway login --browserless` 均未自动完成授权。
