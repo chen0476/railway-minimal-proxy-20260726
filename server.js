@@ -1,5 +1,5 @@
 const origin = new URL(process.env.ORIGIN || 'https://httpbingo.org');
-const port = Number(process.env.PORT || 8080);
+const port = Number(process.env.APP_PORT || 3000);
 
 const hopByHopHeaders = new Set([
   'connection',

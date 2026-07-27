@@ -16,7 +16,7 @@ https://httpbingo.org
 
 ```powershell
 $env:ORIGIN='https://httpbingo.org'
-$env:PORT='8080'
+$env:APP_PORT='3000'
 npm.cmd run check
 npm.cmd start
 ```
@@ -42,7 +42,7 @@ ORIGIN=https://httpbingo.org
 7. Generate Domain 的 target port 填：
 
 ```text
-8080
+3000
 ```
 
 验证命令：
@@ -65,5 +65,4 @@ curl.exe -s -X POST "https://<railway-domain>/anything/post-test?b=2" -H "conten
 
 端口说明：
 
-- Railway 容器按平台注入的 `PORT` 监听，默认回退为 `8080`。
-- Public Networking 的 target port 必须与应用监听端口一致。
+- 本测试包固定监听 `3000`，用于匹配已生成 Railway 公开域名的 target port。
