@@ -62,3 +62,8 @@ curl.exe -s -X POST "https://<railway-domain>/anything/post-test?b=2" -H "conten
 - `/html` 返回测试源站页面内容。
 - path、query、POST body 能转发。
 - 响应头包含 `x-proxy-platform-test: railway`。
+
+端口说明：
+
+- Railway 容器按平台注入的 `PORT` 监听，默认回退为 `8080`。
+- Public Networking 的 target port 必须与应用监听端口一致。

@@ -43,4 +43,4 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 
 ## 当前结论
 
-本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但线上测试仍无法打开。`/health` 也没有返回应用响应，说明问题不是源站请求卡住，而是 Public Networking target port 与容器监听端口不一致。代码已改为监听 Railway 注入的 `PORT || 8080`；Railway 页面中该域名的 target port 需要从 `3000` 更新为 `8080` 后复测。
+本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但线上测试仍无法打开。`/health` 也没有返回应用响应，说明问题不是源站请求卡住，而是 Public Networking target port 与容器监听端口不一致。曾尝试同时监听 `PORT || 8080` 和 `3000`，但 Railway 邮件提示部署崩溃；已回退为单端口监听 `PORT || 8080`，下一步需要通过日志确认崩溃原因，并将 Public Networking target port 改为 `8080`。
