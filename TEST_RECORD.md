@@ -66,3 +66,20 @@ https://railway-minimal-proxy-20260726-production-c40c.up.railway.app
 - 旧域名 `https://railway-minimal-proxy-20260726-production.up.railway.app` 曾返回 502。
 - 用户手动生成新域名 `https://railway-minimal-proxy-20260726-production-c40c.up.railway.app`。
 - 新域名验证通过，`/health` 首字节约 1.15 秒，首页最终 URL 保持 Railway 域名。
+
+2026-07-27 CLI 状态：
+
+- Railway CLI 已登录：`1221847@qq.com`。
+- 当前目录已 link 到成功项目：
+  - Project：`calm-intuition`
+  - Project ID：`ea6f8813-74c3-4171-a2d4-f513db3a5a8c`
+  - Environment：`production`
+  - Environment ID：`b27b40ad-8b3e-40e0-8b90-2546968e7431`
+  - Service：`railway-minimal-proxy-20260726`
+  - Service ID：`5f048027-1958-47ab-b76b-5b02ce1dc9e0`
+- 可直接使用：
+  - `railway.cmd status --json`
+  - `railway.cmd domain list --json`
+  - `railway.cmd logs --lines 50`
+  - `railway.cmd variable --json`
+- 日志确认应用同时监听 `8080` 和 `3000`；有效域名 target port 为 `3000`。
