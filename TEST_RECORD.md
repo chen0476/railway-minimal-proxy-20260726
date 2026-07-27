@@ -43,4 +43,4 @@ https://github.com/chen0476/railway-minimal-proxy-20260726
 
 ## 当前结论
 
-本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但首次线上测试返回 `502 Application failed to respond`。已补 `/health` 直接响应和源站 fetch 8 秒超时，用于区分 Railway 路由不通和源站请求卡住。
+本地验证通过，GitHub 测试仓库已创建。Railway 已部署成功并生成公开域名，但线上测试仍无法打开。`/health` 也没有返回应用响应，说明问题不是源站请求卡住，而是 Public Networking target port 与容器监听端口不一致。代码已改为监听 Railway 注入的 `PORT || 8080`；Railway 页面中该域名的 target port 需要从 `3000` 更新为 `8080` 后复测。
